@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ask Andraax - Consult the ancient Loari Elf about Shadow World lore and mysteries.">
+    <title>Ask Andraax - Vroomfogle & Company</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .ask-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gold-primary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--gold-dark);
+            transform: translateX(-5px);
+        }
+
+        .ask-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .ask-header img {
+            max-width: 250px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 40px rgba(139, 92, 246, 0.3);
+            border: 2px solid rgba(139, 92, 246, 0.4);
+            margin-bottom: 1.5rem;
+        }
+
+        .ask-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .ask-header p {
+            color: var(--text-secondary);
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        .question-form {
+            background: rgba(30, 20, 60, 0.6);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: rgba(139, 92, 246, 0.6);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .submit-button {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(124, 58, 237, 0.4));
+            border: 2px solid rgba(139, 92, 246, 0.6);
+            color: var(--text-primary);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.5);
+            border-color: rgba(139, 92, 246, 0.8);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .answer-container {
+            background: linear-gradient(135deg, rgba(109, 40, 217, 0.25), rgba(88, 28, 135, 0.15));
+            border: 1px solid rgba(109, 40, 217, 0.6);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .answer-container.visible {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .answer-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(109, 40, 217, 0.3);
+        }
+
+        .answer-icon {
+            font-size: 2rem;
+            filter: drop-shadow(0 0 10px rgba(109, 40, 217, 0.5));
+        }
+
+        .answer-title {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .answer-text {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            white-space: pre-wrap;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(139, 92, 246, 0.3);
+            border-top-color: var(--purple-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #FCA5A5;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .warning-box {
+            background: rgba(217, 119, 6, 0.2);
+            border: 1px solid rgba(217, 119, 6, 0.5);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--gold-primary);
+            font-size: 0.95rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ask-container {
+                padding: 1rem;
+            }
+
+            .ask-header h1 {
+                font-size: 2rem;
+            }
+
+            .question-form {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ask-container">
+        <a href="index.html" class="back-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back to Home
+        </a>
+
+        <div class="ask-header">
+            <img src="images/andraax-library.png" alt="Andraax's Library">
+            <h1>Ask Andraax</h1>
+            <p>The ancient elf awaits your question about Shadow World</p>
+        </div>
+
+        <div class="warning-box">
+            Hello curious one, I am Andraax, an ancient Loari Elf who has walked the lands of Kulthea for many millennia. 
+            I have witnessed the rise and fall of empires, and I co-founded the College of Loremasters, a sanctuary for those who 
+            seek to preserve knowledge and lore. My life has been intertwined with the very fabric of history, and I carry with 
+            me the whispers of ages past. What knowledge do you seek from me?
+        </div>
+
+        <form class="question-form" id="questionForm">
+            <div class="form-group">
+                <textarea 
+                    id="question" 
+                    name="question" 
+                    placeholder="Ask about Shadow World's history, geography, creatures, magic, or lore..."
+                    required
+                    rows="3"
+                ></textarea>
+            </div>
+            <button type="submit" class="submit-button" id="submitButton">
+                <span id="buttonText">?</span>
+            </button>
+        </form>
+
+        <div id="loadingIndicator" class="loading" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>Andraax contemplates your question...</p>
+        </div>
+
+        <div id="errorContainer"></div>
+
+        <div id="answerContainer" class="answer-container">
+            <div class="answer-text" id="answerText"></div>
+        </div>
+    </div>
+
+    <script src="ask-andraax.js"></script>
+</body>
+</html>

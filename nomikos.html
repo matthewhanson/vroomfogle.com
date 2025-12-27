@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Visit Nomikos - Chat with the Scribes of the great library and explore Shadow World lore through interactive conversation.">
+    <title>Visit Nomikos - Shadow World Library</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, rgba(15, 12, 41, 0.95), rgba(48, 43, 99, 0.95), rgba(36, 36, 62, 0.95));
+            color: rgba(229, 231, 235, 0.95);
+            overflow: hidden;
+        }
+
+        .app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            min-height: 100dvh;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* Header */
+        .header {
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(30, 20, 60, 0.9), rgba(60, 40, 80, 0.9));
+            border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-logo {
+            flex-shrink: 0;
+        }
+
+        .library-image {
+            max-width: 120px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 40px rgba(139, 92, 246, 0.3);
+            border: 2px solid rgba(139, 92, 246, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .library-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.8), 0 0 60px rgba(139, 92, 246, 0.5);
+        }
+
+        .header-text {
+            flex: 1;
+            text-align: left;
+        }
+
+        .header-text h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
+
+        .subtitle {
+            color: rgba(229, 231, 235, 0.8);
+            font-size: 0.95rem;
+            font-style: italic;
+            letter-spacing: 0.05em;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #fbbf24;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .back-link:hover {
+            color: #f59e0b;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        /* Messages */
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .messages::-webkit-scrollbar-track {
+            background: rgba(31, 41, 55, 0.3);
+            border-radius: 4px;
+        }
+
+        .messages::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.4);
+            border-radius: 4px;
+        }
+
+        .messages::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.6);
+        }
+
+        /* Welcome Screen */
+        .welcome {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: rgba(229, 231, 235, 0.9);
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .welcome h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Georgia', serif;
+        }
+
+        .welcome-desc {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            color: rgba(229, 231, 235, 0.7);
+        }
+
+        .examples {
+            background: rgba(31, 41, 55, 0.4);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: left;
+        }
+
+        .examples-title {
+            color: rgba(139, 92, 246, 0.9);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .examples ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .examples li {
+            padding: 0.5rem 0;
+            color: rgba(229, 231, 235, 0.7);
+            border-bottom: 1px solid rgba(75, 85, 99, 0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-style: italic;
+        }
+
+        .examples li:last-child {
+            border-bottom: none;
+        }
+
+        .examples li:hover {
+            color: rgba(251, 191, 36, 0.9);
+            padding-left: 0.5rem;
+        }
+
+        .examples li::before {
+            content: "⚡ ";
+            opacity: 0.6;
+        }
+
+        /* Message Bubbles */
+        .message {
+            display: flex;
+            gap: 1rem;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            background: rgba(31, 41, 55, 0.6);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .message.user .message-avatar {
+            border-color: rgba(251, 191, 36, 0.5);
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 1rem 1.25rem;
+            border-radius: 16px;
+            position: relative;
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15));
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 16px 16px 4px 16px;
+        }
+
+        .message.assistant .message-bubble {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(124, 58, 237, 0.15));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px 16px 16px 4px;
+        }
+
+        .message-content {
+            color: rgba(229, 231, 235, 0.95);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .message-content p {
+            margin: 0.5rem 0;
+        }
+
+        .message-content p:first-child {
+            margin-top: 0;
+        }
+
+        .message-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .message-content strong,
+        .message-content b {
+            color: rgba(251, 191, 36, 0.9);
+            font-weight: 600;
+        }
+
+        .message-content em,
+        .message-content i {
+            color: rgba(156, 163, 175, 0.9);
+            font-style: italic;
+        }
+
+        .message-content code {
+            background: rgba(31, 41, 55, 0.5);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: rgba(251, 191, 36, 0.9);
+            font-family: 'Courier New', monospace;
+        }
+
+        .message-content ul,
+        .message-content ol {
+            padding-left: 1.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .message-content li {
+            margin: 0.25rem 0;
+        }
+
+        .message-content h1,
+        .message-content h2,
+        .message-content h3 {
+            color: rgba(251, 191, 36, 0.9);
+            margin: 1rem 0 0.5rem;
+            font-family: 'Georgia', serif;
+        }
+
+        .message-content h1 { 
+            font-size: 1.5rem; 
+            font-weight: 700;
+        }
+        
+        .message-content h2 { 
+            font-size: 1.3rem; 
+            font-weight: 600;
+        }
+        
+        .message-content h3 { 
+            font-size: 1.1rem; 
+            font-weight: 600;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 0.4rem;
+            padding: 0.5rem 0;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.6);
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.6;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        /* Input Form */
+        .input-form {
+            flex-shrink: 0;
+            padding: 1.5rem 2rem;
+            background: linear-gradient(135deg, rgba(30, 20, 60, 0.9), rgba(60, 40, 80, 0.9));
+            border-top: 2px solid rgba(139, 92, 246, 0.3);
+            display: flex;
+            gap: 1rem;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-form input {
+            flex: 1;
+            background: rgba(31, 41, 55, 0.6);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: rgba(229, 231, 235, 0.95);
+            padding: 0.875rem 1.25rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-form input::placeholder {
+            color: rgba(156, 163, 175, 0.6);
+            font-style: italic;
+        }
+
+        .input-form input:focus {
+            border-color: rgba(139, 92, 246, 0.6);
+            background: rgba(31, 41, 55, 0.8);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .input-form input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .input-form button {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.8), rgba(124, 58, 237, 0.8));
+            border: none;
+            color: white;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .input-form button:hover:not(:disabled) {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 1), rgba(124, 58, 237, 1));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .input-form button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .input-form button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #fca5a5;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-text {
+                text-align: center;
+            }
+
+            .header-text h1 {
+                font-size: 2rem;
+            }
+
+            .library-image {
+                max-width: 80px;
+            }
+
+            .messages {
+                padding: 1rem;
+            }
+
+            .message-bubble {
+                max-width: 85%;
+            }
+
+            .input-form {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <div class="header-content">
+                <div class="header-logo">
+                    <img src="images/nomikos-library.png" alt="Nomikos Library" class="library-image">
+                </div>
+                <div class="header-text">
+                    <h1 onclick="clearChat()">Nomikos</h1>
+                    <p class="subtitle">You stand within the greatest library on Kulthea.</p>
+                    <a href="index.html" class="back-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        Return Home
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="chat-container">
+            <div class="messages" id="messages">
+                <div class="welcome">
+                    <div class="welcome-icon">📜</div>
+                    <h2>Welcome to the Halls of Nomikos.</h2>
+                    <p class="welcome-desc">
+                        Ask — and the scribes will consult their records, offering comprehensive lore with context from the canon itself.
+                    </p>
+                    <div class="examples">
+                        <p class="examples-title">Try these examples:</p>
+                        <ul id="examplesList"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <form class="input-form" onsubmit="sendMessage(event)">
+                <input
+                    type="text"
+                    id="userInput"
+                    placeholder="Ask a question about The Shadow World"
+                    autocomplete="off"
+                    autofocus
+                />
+                <button type="submit" id="sendButton">
+                    💬 Send
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://nomikos-api.vroomfogle.com';
+        let messageHistory = [];
+        let isProcessing = false;
+
+        const messagesContainer = document.getElementById('messages');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+
+        // Example queries curated from Shadow World lore
+        const CHAT_EXAMPLES = [
+            "Tell me about the assassination of Damos Huroth Alizon II and what happened after",
+            "How did Jiax become King of Saral and what was his relationship with the Loremasters?",
+            "What role did the Priest of Yarthraak play in governing Helyssa?",
+            "Explain how Aldaron unified Emer and became Emperor",
+            "What happened during the fight for Uj when Kio Viax faced Andaras?",
+            "Tell me about the war between Jan and the Shoneb Empire in Thuul",
+            "How did the Blood Brethren defend against Vajaar in the Komari war?",
+            "What caused the conflict between the Naal Triumvirate and Ansidus?",
+            "Describe the major trade centers like Lethys and Kaitaine",
+            "What makes Kakuda unique as an independent city-state?",
+            "How does the magic of the three Realms differ from Arcane Power?",
+            "What are the Lords of Essænce and how did they master both Flows and mind power?",
+            "Tell me about Sea Drakes and their rivalry with whales and giant squid",
+            "What are Fell Beasts and how can they be tamed as air steeds?",
+            "Describe the war-mongering Lugrôki and their hatred of men and elves",
+            "What is Trystrium and why is it so valuable for weapons?",
+            "How do Bloodstones work and what makes them single-use?",
+            "What protective powers do Bluestones have against essence spells?",
+            "Tell me about Eissa's Tears and how they detect evil",
+            "What happened in the year 6050 that changed the balance of power?",
+            "How did the political situation in Emer change around year 1300?",
+            "What were the consequences of the battles in year 3347?",
+            "Describe the conflict between Channeling, Essence, and Mentalism users",
+            "How do the Nomari survive in their subterranean world?",
+            "What makes the Ta-lairi different from both humans and elves?"
+        ];
+
+        // Get random examples
+        function getRandomExamples(count = 4) {
+            const shuffled = [...CHAT_EXAMPLES].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        // Initialize examples on page load
+        function initializeExamples() {
+            const examplesList = document.getElementById('examplesList');
+            if (examplesList) {
+                const examples = getRandomExamples(4);
+                examples.forEach(example => {
+                    const li = document.createElement('li');
+                    li.textContent = `"${example}"`;
+                    li.onclick = () => handleExampleClick(example);
+                    examplesList.appendChild(li);
+                });
+            }
+        }
+
+        function handleExampleClick(query) {
+            userInput.value = query;
+            // Trigger submit after a brief delay to show the input
+            setTimeout(() => {
+                sendMessage();
+            }, 50);
+        }
+
+        function clearChat() {
+            if (messageHistory.length === 0) return;
+            
+            if (confirm('Clear all messages and start a new session?')) {
+                messageHistory = [];
+                messagesContainer.innerHTML = `
+                    <div class="welcome">
+                        <div class="welcome-icon">📜</div>
+                        <h2>Welcome to the Halls of Nomikos.</h2>
+                        <p class="welcome-desc">
+                            Ask — and the scribes will consult their records, offering comprehensive lore with context from the canon itself.
+                        </p>
+                        <div class="examples">
+                            <p class="examples-title">Try these examples:</p>
+                            <ul id="examplesList"></ul>
+                        </div>
+                    </div>
+                `;
+                initializeExamples();
+            }
+        }
+
+        function addMessage(role, content) {
+            // Remove welcome screen if it exists
+            const welcome = messagesContainer.querySelector('.welcome');
+            if (welcome) {
+                welcome.remove();
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = role === 'user' ? '📜' : '📖';
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'message-bubble';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            // Use marked.js to parse markdown
+            contentDiv.innerHTML = marked.parse(content);
+            
+            bubbleDiv.appendChild(contentDiv);
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(bubbleDiv);
+            messagesContainer.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message assistant loading';
+            typingDiv.id = 'typing-indicator';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = '📖';
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'message-bubble';
+            
+            const typingContent = document.createElement('div');
+            typingContent.className = 'typing-indicator';
+            typingContent.innerHTML = '<span></span><span></span><span></span>';
+            
+            bubbleDiv.appendChild(typingContent);
+            typingDiv.appendChild(avatar);
+            typingDiv.appendChild(bubbleDiv);
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = `Error: ${message}`;
+            messagesContainer.appendChild(errorDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+
+        async function sendMessage(event) {
+            if (event) event.preventDefault();
+            
+            const message = userInput.value.trim();
+            if (!message || isProcessing) return;
+
+            isProcessing = true;
+            sendButton.disabled = true;
+            userInput.disabled = true;
+
+            // Add user message to display
+            addMessage('user', message);
+            
+            // Add to history
+            messageHistory.push({ role: 'user', content: message });
+
+            // Clear input
+            userInput.value = '';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                const response = await fetch(`${API_URL}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        messages: messageHistory,
+                        persona: 'scribe',
+                        model: 'gpt-4o-mini',
+                        temperature: 0.7,
+                        max_tokens: 2048
+                    })
+                });
+
+                hideTypingIndicator();
+
+                if (!response.ok) {
+                    throw new Error(`API returned ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const assistantMessage = data.choices[0].message.content;
+
+                // Add assistant response to display and history
+                addMessage('assistant', assistantMessage);
+                messageHistory.push({ role: 'assistant', content: assistantMessage });
+
+            } catch (error) {
+                hideTypingIndicator();
+                console.error('Error:', error);
+                showError(error.message || 'Failed to connect to Nomikos. Please try again.');
+                
+                // Remove failed user message from history
+                messageHistory.pop();
+            } finally {
+                isProcessing = false;
+                sendButton.disabled = false;
+                userInput.disabled = false;
+                userInput.focus();
+            }
+        }
+
+        // Focus input on load
+        window.addEventListener('load', () => {
+            initializeExamples();
+            userInput.focus();
+        });
+    </script>
+</body>
+</html>
