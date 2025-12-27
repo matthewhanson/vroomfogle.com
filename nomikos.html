@@ -568,37 +568,31 @@
         const userInput = document.getElementById('userInput');
         const sendButton = document.getElementById('sendButton');
 
-        // Example queries curated from Shadow World lore
-        const CHAT_EXAMPLES = [
-            "Tell me about the assassination of Damos Huroth Alizon II and what happened after",
-            "How did Jiax become King of Saral and what was his relationship with the Loremasters?",
-            "What role did the Priest of Yarthraak play in governing Helyssa?",
-            "Explain how Aldaron unified Emer and became Emperor",
-            "What happened during the fight for Uj when Kio Viax faced Andaras?",
-            "Tell me about the war between Jan and the Shoneb Empire in Thuul",
-            "How did the Blood Brethren defend against Vajaar in the Komari war?",
-            "What caused the conflict between the Naal Triumvirate and Ansidus?",
-            "Describe the major trade centers like Lethys and Kaitaine",
-            "What makes Kakuda unique as an independent city-state?",
-            "How does the magic of the three Realms differ from Arcane Power?",
-            "What are the Lords of Essænce and how did they master both Flows and mind power?",
-            "Tell me about Sea Drakes and their rivalry with whales and giant squid",
-            "What are Fell Beasts and how can they be tamed as air steeds?",
-            "Describe the war-mongering Lugrôki and their hatred of men and elves",
-            "What is Trystrium and why is it so valuable for weapons?",
-            "How do Bloodstones work and what makes them single-use?",
-            "What protective powers do Bluestones have against essence spells?",
-            "Tell me about Eissa's Tears and how they detect evil",
-            "What happened in the year 6050 that changed the balance of power?",
-            "How did the political situation in Emer change around year 1300?",
-            "What were the consequences of the battles in year 3347?",
-            "Describe the conflict between Channeling, Essence, and Mentalism users",
-            "How do the Nomari survive in their subterranean world?",
-            "What makes the Ta-lairi different from both humans and elves?"
-        ];
+        let CHAT_EXAMPLES = [];
+
+        // Load examples from external JSON file
+        async function loadExamples() {
+            try {
+                const response = await fetch('nomikos-examples.json');
+                const data = await response.json();
+                CHAT_EXAMPLES = data.examples;
+                console.log(`Loaded ${CHAT_EXAMPLES.length} example questions`);
+                initializeExamples();
+            } catch (error) {
+                console.error('Failed to load examples:', error);
+                // Fallback to minimal examples
+                CHAT_EXAMPLES = [
+                    "Tell me about the assassination of Damos Huroth Alizon II and what happened after",
+                    "How does the magic of the three Realms differ from Arcane Power?",
+                    "What is Trystrium and why is it so valuable for weapons?",
+                    "Explain the difference between the Second Era and Third Era"
+                ];
+                initializeExamples();
+            }
+        }
 
         // Get random examples
-        function getRandomExamples(count = 4) {
+        function getRandomExamples(count = 5) {
             const shuffled = [...CHAT_EXAMPLES].sort(() => 0.5 - Math.random());
             return shuffled.slice(0, count);
         }
@@ -607,7 +601,7 @@
         function initializeExamples() {
             const examplesList = document.getElementById('examplesList');
             if (examplesList) {
-                const examples = getRandomExamples(4);
+                const examples = getRandomExamples(5);
                 examples.forEach(example => {
                     const li = document.createElement('li');
                     li.textContent = `"${example}"`;
@@ -784,9 +778,9 @@
             }
         }
 
-        // Focus input on load
+        // Focus input on load and load examples
         window.addEventListener('load', () => {
-            initializeExamples();
+            loadExamples();
             userInput.focus();
         });
     </script>
