@@ -160,7 +160,7 @@
         }
 
         .welcome-icon {
-            font-size: 4rem;
+            font-size: 5rem;
             margin-bottom: 1rem;
             animation: float 3s ease-in-out infinite;
         }
@@ -261,7 +261,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             flex-shrink: 0;
             background: rgba(31, 41, 55, 0.6);
             border: 2px solid rgba(139, 92, 246, 0.3);
@@ -532,7 +532,7 @@
         <div class="chat-container">
             <div class="messages" id="messages">
                 <div class="welcome">
-                    <div class="welcome-icon">📜</div>
+                    <div class="welcome-icon">⟁</div>
                     <h2>Welcome to the Halls of Nomikos.</h2>
                     <p class="welcome-desc">
                         Ask — and the scribes will consult their records, offering comprehensive lore with context from the canon itself.
@@ -632,7 +632,7 @@
                 messageHistory = [];
                 messagesContainer.innerHTML = `
                     <div class="welcome">
-                        <div class="welcome-icon">📜</div>
+                        <div class="welcome-icon">⟁</div>
                         <h2>Welcome to the Halls of Nomikos.</h2>
                         <p class="welcome-desc">
                             Ask — and the scribes will consult their records, offering comprehensive lore with context from the canon itself.
@@ -659,7 +659,7 @@
             
             const avatar = document.createElement('div');
             avatar.className = 'message-avatar';
-            avatar.textContent = role === 'user' ? '📜' : '📖';
+            avatar.textContent = role === 'user' ? '⌬' : '⟁';
             
             const bubbleDiv = document.createElement('div');
             bubbleDiv.className = 'message-bubble';
@@ -686,7 +686,7 @@
             
             const avatar = document.createElement('div');
             avatar.className = 'message-avatar';
-            avatar.textContent = '📖';
+            avatar.textContent = '⟁';
             
             const bubbleDiv = document.createElement('div');
             bubbleDiv.className = 'message-bubble';
