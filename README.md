@@ -170,6 +170,28 @@ All API calls go to `nomikos-api.vroomfogle.com`:
 - Private documentation
 - Source material with copyright restrictions
 
+## Chronicles content (keeping in sync)
+
+This site is static and can’t reliably fetch markdown from a *different* repo at runtime.
+For campaign chronicles (e.g. **Legacy of the Y’kin**), we keep a **local mirror** inside this repo:
+
+* `content/legacy-of-the-yinka/chronicles/`
+
+The chronicle pages load markdown from that folder.
+
+### Sync from the source repo
+
+Use the helper script:
+
+* `scripts/sync-legacy-of-the-yinka-chronicles.sh`
+
+It copies `chronicles/*.md` from your source repo into `content/…/chronicles/` using `rsync --delete`, so removals/renames stay consistent.
+
+Recommended workflow:
+1. Edit chronicles in the source repo (`legacy-of-the-yinka`).
+2. Run the sync script in this repo.
+3. Commit the updated `content/…` mirror and deploy.
+
 ## Related Projects
 
 - **nomikos**: Backend API (Lambda + CDK)

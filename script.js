@@ -32,14 +32,22 @@ const observer = new IntersectionObserver((entries) => {
 
 // Apply fade-in to feature cards
 document.addEventListener('DOMContentLoaded', () => {
-    // Animate feature cards on scroll
-    const featureCards = document.querySelectorAll('.feature-card');
-    featureCards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        card.style.transition = `all 0.6s ease ${index * 0.1}s`;
-        observer.observe(card);
-    });
+    function animateCardsInOrder(scopeSelector, cardSelector = '.feature-card') {
+        const scope = document.querySelector(scopeSelector);
+        if (!scope) return;
+        const cards = scope.querySelectorAll(cardSelector);
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = `all 0.6s ease ${index * 0.1}s`;
+            observer.observe(card);
+        });
+    }
+
+    // Animate cards per section so each section reveals in its own order.
+    animateCardsInOrder('#library-oracle');
+    animateCardsInOrder('#legacy');
+    animateCardsInOrder('#coming-soon');
     
     // Animate about content
     const aboutContent = document.querySelector('.about-content');
