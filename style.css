@@ -44,9 +44,76 @@ body {
     overflow-x: hidden;
 }
 
+/* ==========================================================
+    Markdown content (typography + tables)
+    ========================================================== */
+
+/* Make markdown tables readable and responsive (Timeline relies on this). */
+.markdown-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.25rem 0;
+    background: rgba(15, 12, 41, 0.5);
+    border: 1px solid rgba(229, 231, 235, 0.14);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Horizontal scrolling on small screens. */
+.markdown-content table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.markdown-content thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(251, 191, 36, 0.18));
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8rem;
+}
+
+.markdown-content th,
+.markdown-content td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid rgba(229, 231, 235, 0.12);
+}
+
+.markdown-content tbody tr:nth-child(odd) {
+    background: rgba(48, 43, 99, 0.22);
+}
+
+.markdown-content tbody tr:hover {
+    background: rgba(139, 92, 246, 0.12);
+}
+
+.markdown-content tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.markdown-content td:first-child,
+.markdown-content th:first-child {
+    white-space: nowrap;
+    min-width: 8ch;
+}
+
+/* Chronicles landscape cards: allow description to be omitted and hydrated later */
+.landscape-card__description:empty {
+    display: none;
+}
+
 html {
     scroll-behavior: smooth;
 }
+
+/* (debug outline removed) */
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
@@ -221,11 +288,6 @@ h1, h2, h3, h4, h5, h6 {
     flex-direction: column;
 }
 
-.home-feature-grid .feature-button {
-    margin-top: auto;
-    align-self: center;
-}
-
 /* Align portrait-card images in the homepage pair so mixed aspect ratios don't break alignment */
 .home-feature-grid .feature-image-small {
     width: 100%;
@@ -326,13 +388,28 @@ h1, h2, h3, h4, h5, h6 {
 
 .page-header {
     position: relative;
-    padding: 4rem 0 3rem;
+    padding: 6rem 0 4.5rem;
+    /* Standard header hero:
+       - Image comes from --header-bg (e.g. url('...')).
+       - We use a single background (cover) and readability overlays.
+       - This avoids the “extra band” artifact caused by layered pseudo-elements.
+    */
     background:
-        linear-gradient(135deg, rgba(15, 12, 41, 0.85), rgba(48, 43, 99, 0.75), rgba(139, 92, 246, 0.35)),
-        var(--header-bg, none);
-    background-size: cover;
-    background-position: center;
+        linear-gradient(135deg, rgba(15, 12, 41, 0.88), rgba(48, 43, 99, 0.78), rgba(139, 92, 246, 0.38)),
+        var(--header-bg, none) center / cover no-repeat;
+    background-color: rgba(15, 12, 41, 0.92);
+    background-attachment: fixed;
     border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+/* Chronicles landing page: more static hero, centered best-fit image.
+   This is intentionally scoped so other legacy headers keep their current look. */
+.page-header.page-header--chronicles {
+    background-attachment: scroll;
+    background:
+        linear-gradient(135deg, rgba(15, 12, 41, 0.92), rgba(48, 43, 99, 0.82), rgba(139, 92, 246, 0.42)),
+        var(--header-bg, none) center / 100% auto no-repeat;
+    background-color: rgba(15, 12, 41, 0.95);
 }
 
 .page-header__overlay {
@@ -345,6 +422,14 @@ h1, h2, h3, h4, h5, h6 {
 .page-header .container {
     position: relative;
     z-index: 1;
+}
+
+@media (max-width: 900px) {
+    .page-header {
+        /* Mobile browsers often ignore fixed backgrounds or render them poorly. */
+        padding: 4.5rem 0 3.5rem;
+        background-attachment: scroll;
+    }
 }
 
 .back-link {
@@ -373,6 +458,8 @@ h1, h2, h3, h4, h5, h6 {
 .page-subtitle {
     color: var(--text-secondary);
     max-width: 900px;
+    font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+    line-height: 1.5;
 }
 
 .landscape-cards {
@@ -435,6 +522,14 @@ h1, h2, h3, h4, h5, h6 {
     background: rgba(139, 92, 246, 0.18);
     color: var(--text-primary);
     font-weight: 600;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.landscape-card:hover .landscape-card__cta,
+.landscape-card:focus-visible .landscape-card__cta {
+    transform: translateX(4px);
+    background: rgba(139, 92, 246, 0.24);
+    border-color: rgba(139, 92, 246, 0.65);
 }
 
 .link-grid {
@@ -566,6 +661,28 @@ h1, h2, h3, h4, h5, h6 {
     border: 0;
 }
 
+/* Parallax divider shown between markdown sections (inserted by chronicles.js) */
+.markdown-parallax-divider {
+    height: 160px;
+    margin: 1.75rem 0;
+    border-radius: 14px;
+    background:
+        linear-gradient(180deg, rgba(15, 12, 41, 0.65), rgba(15, 12, 41, 0.2), rgba(15, 12, 41, 0.65)),
+        var(--divider-bg, var(--header-bg, none));
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    border: 1px solid rgba(251, 191, 36, 0.18);
+    box-shadow: var(--shadow-card);
+}
+
+@media (max-width: 900px) {
+    .markdown-parallax-divider {
+        height: 120px;
+        background-attachment: scroll;
+    }
+}
+
 .content-loading {
     color: var(--text-muted);
 }
@@ -579,9 +696,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .writings-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 1.25rem;
+    /* Writings page now renders as stacked, full-width sections. */
+    display: block;
 }
 
 .writing-card {
@@ -592,6 +708,63 @@ h1, h2, h3, h4, h5, h6 {
     backdrop-filter: blur(10px);
 }
 
+/* New stacked/full-width writings layout */
+.writing-section {
+    margin: 0;
+}
+
+/*
+  Writings page: make the stacked layout match our standard markdown rhythm.
+  The parallax divider already creates a big visual break, so we keep the
+  spacing between sections tight.
+*/
+.writings-grid .markdown-parallax-divider {
+    margin: 1.25rem 0;
+}
+
+/* Ensure the title doesn't add extra perceived "double" spacing before the first paragraph. */
+.writing-section__inner .writing-title {
+    margin-bottom: 0.5rem;
+}
+
+/* Keep body typography identical to other pages (.markdown-content), but avoid an extra top gap. */
+.writing-section__inner .writing-body > p:first-child {
+    margin-top: 0;
+}
+
+/*
+  Writings page: aggressively match the visual rhythm of other markdown pages.
+  If the page *still* feels double-spaced after this, the remaining difference
+  is likely panel padding (not paragraph spacing).
+*/
+.writings-grid {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.writings-grid .writing-body {
+    line-height: inherit;
+}
+
+/* Guard rails: prevent any accidental extra per-paragraph spacing inside writings. */
+.writings-grid .writing-body p {
+    margin: 0.75rem 0;
+}
+
+.writing-section__inner {
+    background: rgba(30, 20, 60, 0.35);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    border-radius: 12px;
+    padding: 1.25rem;
+    backdrop-filter: blur(10px);
+}
+
+@media (max-width: 900px) {
+    .writing-section__inner {
+        padding: 1rem;
+    }
+}
+
 .writing-title {
     margin-bottom: 0.75rem;
     font-size: 1.25rem;
@@ -599,7 +772,15 @@ h1, h2, h3, h4, h5, h6 {
 
 .writing-body {
     color: var(--text-secondary);
+    line-height: 1.6;
 }
+
+/*
+  Writings markdown typography:
+  `chronicles.js` already applies `.markdown-content` to the writing body.
+  Avoid duplicate rules here, because the cascade can make spacing feel "too much"
+  compared to other markdown pages.
+*/
 
 .writing-attribution {
     margin-top: 1rem;
@@ -639,16 +820,6 @@ h1, h2, h3, h4, h5, h6 {
 .andraax-card {
     background: linear-gradient(135deg, rgba(109, 40, 217, 0.25), rgba(88, 28, 135, 0.15)) !important;
     border-color: rgba(109, 40, 217, 0.6) !important;
-}
-
-.andraax-button {
-    background: rgba(109, 40, 217, 0.3) !important;
-    border-color: rgba(109, 40, 217, 0.5) !important;
-}
-
-.andraax-button:hover {
-    background: rgba(109, 40, 217, 0.5) !important;
-    box-shadow: 0 4px 15px rgba(109, 40, 217, 0.4) !important;
 }
 
 /* ==========================================================
@@ -699,6 +870,36 @@ a.feature-card {
     transform: translateY(-5px);
     box-shadow: var(--shadow-card), var(--glow-purple);
     border-color: rgba(139, 92, 246, 0.5);
+}
+
+/* Link affordance for cards that are actual links (<a>) */
+a.feature-card::after {
+    content: '↗';
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    border: 1px solid rgba(251, 191, 36, 0.25);
+    background: rgba(15, 12, 41, 0.15);
+    color: rgba(251, 191, 36, 0.75);
+    font-size: 1rem;
+    line-height: 1;
+    opacity: 0;
+    transform: translateY(2px);
+    transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    pointer-events: none;
+}
+
+a.feature-card:hover::after,
+a.feature-card:focus-visible::after {
+    opacity: 1;
+    transform: translateY(0);
+    background: rgba(15, 12, 41, 0.35);
+    border-color: rgba(251, 191, 36, 0.45);
 }
 
 .feature-card.featured {
@@ -763,25 +964,6 @@ a.feature-card {
     line-height: 1.8;
 }
 
-.feature-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(139, 92, 246, 0.3);
-    border: 1px solid rgba(139, 92, 246, 0.5);
-    color: var(--text-primary);
-    padding: 0.8rem 2rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.feature-button:hover {
-    background: rgba(139, 92, 246, 0.5);
-    transform: translateX(5px);
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
-}
 
 .status-badge {
     display: inline-flex;
