@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Legacy of the Y’kin — setting: lore, geography, cultures, and cities.">
+    <title>Legacy of the Y’kin — Setting</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header class="page-header page-header--setting" style="--header-bg: url('/legacy-of-the-ykin/images/southern-jaiman-map.jpg');">
+        <div class="page-header__overlay"></div>
+        <div class="container">
+            <a class="back-link" href="../index.html#legacy">← Back to Legacy of the Y’kin</a>
+            <h1 class="page-title">Setting</h1>
+            <p class="page-subtitle">Lore, geography, cultures, and cities — rendered from markdown.</p>
+        </div>
+    </header>
+
+    <main class="section">
+        <div class="container">
+            <div class="landscape-cards">
+                <a class="landscape-card" href="setting-tanara.html" style="--card-bg: url('/legacy-of-the-ykin/images/tanara-map.png');">
+                    <div class="landscape-card__overlay"></div>
+                    <div class="landscape-card__content">
+                        <h2 class="landscape-card__title">Tanara</h2>
+                        <p class="landscape-card__description"></p>
+                        <div class="landscape-card__cta">Open →</div>
+                    </div>
+                </a>
+
+                <a class="landscape-card" href="setting-the-city-of-achren.html" style="--card-bg: url('/legacy-of-the-ykin/images/achren.png');">
+                    <div class="landscape-card__overlay"></div>
+                    <div class="landscape-card__content">
+                        <h2 class="landscape-card__title">The City of Achren</h2>
+                        <p class="landscape-card__description"></p>
+                        <div class="landscape-card__cta">Open →</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-note">Legacy of the Y’kin — setting.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        // Populate card descriptions from markdown YAML frontmatter (description: "...").
+        // This keeps the card copy in sync with the source-of-truth setting files.
+        async function loadFrontmatterDescription(url) {
+            const res = await fetch(url, { cache: 'no-cache' });
+            if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
+            const text = (await res.text()).replace(/^\uFEFF/, '').replace(/\r\n/g, '\n');
+            if (!text.startsWith('---\n')) return null;
+            const end = text.indexOf('\n---\n');
+            if (end === -1) return null;
+            const fm = text.slice(4, end).split('\n');
+            for (const line of fm) {
+                const m = line.match(/^description:\s*(.*)\s*$/);
+                if (!m) continue;
+                let v = m[1].trim();
+                if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+                    v = v.slice(1, -1);
+                }
+                return v;
+            }
+            return null;
+        }
+
+        (async function hydrateSettingCards() {
+            const mappings = [
+                { href: 'setting-tanara.html', md: 'markdown/setting/tanara.md' },
+                { href: 'setting-the-city-of-achren.html', md: 'markdown/setting/the-city-of-achren.md' },
+            ];
+
+            await Promise.all(mappings.map(async ({ href, md }) => {
+                const card = document.querySelector(`.landscape-card[href="${href}"]`);
+                if (!card) return;
+                const descEl = card.querySelector('.landscape-card__description');
+                if (!descEl) return;
+
+                try {
+                    const desc = await loadFrontmatterDescription(md);
+                    if (desc) descEl.textContent = desc;
+                } catch {
+                    // Silent fallback: keep author-provided HTML copy.
+                }
+            }));
+        })();
+    </script>
+</body>
+</html>

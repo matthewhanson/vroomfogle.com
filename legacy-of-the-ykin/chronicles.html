@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Legacy of the Y’kin — chronicles: chapters, timeline, and collected writings.">
+    <title>Legacy of the Y’kin — Chronicles</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header class="page-header page-header--chronicles" style="--header-bg: url('/legacy-of-the-ykin/images/chronicles.png');">
+        <div class="page-header__overlay"></div>
+        <div class="container">
+            <a class="back-link" href="../index.html#legacy">← Back to Legacy of the Y’kin</a>
+            <h1 class="page-title">Chronicles</h1>
+            <p class="page-subtitle">Session chapters, timeline, and collected writings.</p>
+        </div>
+    </header>
+
+    <main class="section">
+        <div class="container">
+            <div class="landscape-cards">
+                <a class="landscape-card" href="timeline.html" style="--card-bg: url('/legacy-of-the-ykin/images/timeline.png');">
+                    <div class="landscape-card__overlay"></div>
+                    <div class="landscape-card__content">
+                        <h2 class="landscape-card__title">Overview and Timeline</h2>
+                        <p class="landscape-card__description"></p>
+                        <div class="landscape-card__cta">Open Timeline →</div>
+                    </div>
+                </a>
+
+                <a class="landscape-card" href="the-cast.html" style="--card-bg: url('/legacy-of-the-ykin/images/tun-brothers.png');">
+                    <div class="landscape-card__overlay"></div>
+                    <div class="landscape-card__content">
+                        <h2 class="landscape-card__title">The Cast</h2>
+                        <p class="landscape-card__description"></p>
+                        <div class="landscape-card__cta">Open The Cast →</div>
+                    </div>
+                </a>
+
+                <a class="landscape-card" href="chapter-1.html" style="--card-bg: url('/legacy-of-the-ykin/images/borley-boys.png');">
+                    <div class="landscape-card__overlay"></div>
+                    <div class="landscape-card__content">
+                        <h2 class="landscape-card__title">Chapter 1</h2>
+                        <p class="landscape-card__subtitle">The Borley Boys</p>
+                        <p class="landscape-card__description"></p>
+                        <div class="landscape-card__cta">Open Chapter →</div>
+                    </div>
+                </a>
+
+                <a class="landscape-card" href="chapter-2.html" style="--card-bg: url('/legacy-of-the-ykin/images/achren.png');">
+                    <div class="landscape-card__overlay"></div>
+                    <div class="landscape-card__content">
+                        <h2 class="landscape-card__title">Chapter 2</h2>
+                        <p class="landscape-card__subtitle">The City of Achren</p>
+                        <p class="landscape-card__description"></p>
+                        <div class="landscape-card__cta">Open Chapter →</div>
+                    </div>
+                </a>
+
+                <a class="landscape-card" href="chapter-3.html" style="--card-bg: url('/legacy-of-the-ykin/images/the-portal.png');">
+                    <div class="landscape-card__overlay"></div>
+                    <div class="landscape-card__content">
+                        <h2 class="landscape-card__title">Chapter 3</h2>
+                        <p class="landscape-card__subtitle">Into the Portal</p>
+                        <p class="landscape-card__description"></p>
+                        <div class="landscape-card__cta">Open Chapter →</div>
+                    </div>
+                </a>
+
+                <a class="landscape-card" href="writings.html" style="--card-bg: url('/legacy-of-the-ykin/images/writing.png');">
+                    <div class="landscape-card__overlay"></div>
+                    <div class="landscape-card__content">
+                        <h2 class="landscape-card__title">Writings</h2>
+                        <p class="landscape-card__description"></p>
+                        <div class="landscape-card__cta">Open Writings →</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-note">Legacy of the Y’kin — chronicles.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        // Populate card descriptions from markdown YAML frontmatter (description: "...").
+        // This keeps the card copy in sync with the source-of-truth chronicles files.
+        async function loadFrontmatterDescription(url) {
+            const res = await fetch(url, { cache: 'no-cache' });
+            if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
+            const text = (await res.text()).replace(/^\uFEFF/, '').replace(/\r\n/g, '\n');
+            if (!text.startsWith('---\n')) return null;
+            const end = text.indexOf('\n---\n');
+            if (end === -1) return null;
+            const fm = text.slice(4, end).split('\n');
+            for (const line of fm) {
+                const m = line.match(/^description:\s*(.*)\s*$/);
+                if (!m) continue;
+                let v = m[1].trim();
+                // Support quoted or unquoted scalars.
+                if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+                    v = v.slice(1, -1);
+                }
+                return v;
+            }
+            return null;
+        }
+
+        (async function hydrateChroniclesCards() {
+            const mappings = [
+                { href: 'chapter-1.html', md: 'markdown/chronicles/1-the-borley-boys.md' },
+                { href: 'chapter-2.html', md: 'markdown/chronicles/2-the-city-of-achren.md' },
+                { href: 'chapter-3.html', md: 'markdown/chronicles/3-into-the-portal.md' },
+                { href: 'timeline.html', md: 'markdown/chronicles/timeline.md' },
+                { href: 'the-cast.html', md: 'markdown/chronicles/the-cast.md' },
+                { href: 'writings.html', md: 'markdown/chronicles/writings.md' },
+            ];
+
+            await Promise.all(mappings.map(async ({ href, md }) => {
+                const card = document.querySelector(`.landscape-card[href="${href}"]`);
+                if (!card) return;
+                const descEl = card.querySelector('.landscape-card__description');
+                if (!descEl) return;
+
+                try {
+                    const desc = await loadFrontmatterDescription(md);
+                    if (desc) descEl.textContent = desc;
+                } catch {
+                    // Silent fallback: keep author-provided HTML copy.
+                }
+            }));
+        })();
+    </script>
+</body>
+</html>
