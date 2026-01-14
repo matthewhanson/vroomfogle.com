@@ -155,6 +155,38 @@ function stripYamlFrontmatter(md) {
   return normalized.replace(/^---\n[\s\S]*?\n---\n?/, '');
 }
 
+function extractYamlFrontmatterDescription(md) {
+  // Minimal YAML frontmatter extraction (top-of-file only).
+  // We only need `description:` for page subtitles.
+  const withoutBom = String(md || '').replace(/^\uFEFF/, '');
+  const normalized = withoutBom.replace(/\r\n/g, '\n');
+  if (!normalized.startsWith('---\n')) return null;
+
+  const end = normalized.indexOf('\n---\n');
+  if (end === -1) return null;
+
+  const fm = normalized.slice(4, end).split('\n');
+  for (const line of fm) {
+    const m = line.match(/^description:\s*(.*)\s*$/);
+    if (!m) continue;
+    let v = (m[1] || '').trim();
+    if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+      v = v.slice(1, -1);
+    }
+    return v || null;
+  }
+  return null;
+}
+
+function hydratePageSubtitleFromFrontmatter(description) {
+  if (!description) return;
+  const subtitleEl = document.querySelector('.page-subtitle');
+  if (!subtitleEl) return;
+  const current = (subtitleEl.textContent || '').trim();
+  if (!/^rendered from markdown\.?$/i.test(current)) return;
+  subtitleEl.textContent = description;
+}
+
 function stripLeadingH1(md) {
   // Many of our site pages already show their own title in the HTML header.
   // To avoid duplicate titles, drop the very first Markdown H1 if it appears
@@ -341,7 +373,9 @@ async function renderStandardMarkdown() {
   if (!container) return;
 
   try {
-    let md = stripYamlFrontmatter(await fetchText(SOURCE_URL));
+    const raw = await fetchText(SOURCE_URL);
+    hydratePageSubtitleFromFrontmatter(extractYamlFrontmatterDescription(raw));
+    let md = stripYamlFrontmatter(raw);
     md = stripLeadingH1(md);
     container.classList.remove('content-loading');
     renderMarkdownWithH2Dividers(container, md);
