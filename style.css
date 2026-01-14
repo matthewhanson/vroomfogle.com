@@ -412,6 +412,15 @@ h1, h2, h3, h4, h5, h6 {
     background-color: rgba(15, 12, 41, 0.95);
 }
 
+/* Setting landing page: match Chronicles header centering behavior. */
+.page-header.page-header--setting {
+    background-attachment: scroll;
+    background:
+        linear-gradient(135deg, rgba(15, 12, 41, 0.92), rgba(48, 43, 99, 0.82), rgba(139, 92, 246, 0.42)),
+        var(--header-bg, none) center / 100% auto no-repeat;
+    background-color: rgba(15, 12, 41, 0.95);
+}
+
 .page-header__overlay {
     position: absolute;
     inset: 0;
@@ -507,6 +516,13 @@ h1, h2, h3, h4, h5, h6 {
 .landscape-card__title {
     font-size: 1.6rem;
     margin-bottom: 0.5rem;
+}
+
+.landscape-card__subtitle {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.9rem;
 }
 
 .landscape-card__description {
