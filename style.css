@@ -846,6 +846,10 @@ h1, h2, h3, h4, h5, h6 {
     height: 180px;
     object-fit: cover;
     object-position: center;
+
+    /* Hint for better downscaling */
+    image-rendering: auto;
+    -ms-interpolation-mode: bicubic;
 }
 
 .feature-card {
@@ -932,6 +936,9 @@ a.feature-card:focus-visible::after {
     border: 2px solid rgba(139, 92, 246, 0.4);
     margin-bottom: 1rem;
     transition: all 0.3s ease;
+
+    image-rendering: auto;
+    -ms-interpolation-mode: bicubic;
 }
 
 .feature-image-small:hover {
