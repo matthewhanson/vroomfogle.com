@@ -53,7 +53,7 @@ Zeki did not touch it yet. He watched everyone else instead.
 
 The desk drawers yielded their own quiet haul.
 
-On the left: a second flute made of dark wood—skin-flute in shape and feel, eerily similar to the one being played above. It rested in padded material alongside four smoky hexagonal crystals, each about two inches long, pointed at one end and capped at the other with metal etched in runes.
+On the left: a second flute made of dark flute in shape and feel, eerily similar to the one being played above. It rested in padded material alongside four smoky hexagonal crystals, each about two inches long, pointed at one end and capped at the other with metal etched in runes.
 
 On the right: a large coin, nearly two and a half inches across, cut from greenish stone. One face bore a griffin—lion’s body, eagle’s head and wings—while the back was ringed with runes. Alongside it sat six clear crystals an inch long, and one red crystal, all capped and inscribed.
 
@@ -236,4 +236,3 @@ Behind them, the clatter of bone echoed—distant, then nearer, then swallowed b
 They fled into the tunnel’s promise, carrying a handful of salvaged wonders and a growing certainty that the Bridge of Vows was less a crossing than a machine—one that answered to bargains, to keys, and to whoever had the will to feed it.
 
 Behind them, the domed ceiling’s painted stars watched without blinking.
-
