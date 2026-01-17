@@ -55,7 +55,9 @@ The desk drawers yielded their own quiet haul.
 
 On the left: a second flute made of dark flute in shape and feel, eerily similar to the one being played above. It rested in padded material alongside four smoky hexagonal crystals, each about two inches long, pointed at one end and capped at the other with metal etched in runes.
 
-On the right: a large coin, nearly two and a half inches across, cut from greenish stone. One face bore a griffin—lion’s body, eagle’s head and wings—while the back was ringed with runes. Alongside it sat six clear crystals an inch long, and one red crystal, all capped and inscribed.
+On the right: a heavy greenish stone amulet, nearly two and a half inches across. One face bore a gryphon—lion’s body, eagle’s head and wings—while the back was ringed with runes. Alongside it sat six clear crystals an inch long, and one red crystal, all capped and inscribed.
+
+And beneath the padding—like an afterthought the Earthwardens never expected anyone to find—rested a long dagger made of greenish-silver metal, etched with many runes. The handle was green leather, slightly worn, and the pommel was a tiny jade gryphon head. A sheath of the same worn greenish leather-like material lay with it, tooled with ornate designs and fitted with a dull, untarnished copper-colored metal.
 
 The coffin already held a purple-glowing crystal in one of its slots.
 
@@ -107,13 +109,15 @@ The motion was too fast for courtesy and too controlled for fear. The lace mask 
 
 “How do we get out?”
 
-## The Coin Door
+## The Slot Door
 
-They noticed the wall-door again. Up close, it had more honesty: a hexagonal slot at the side, and—set into the wall nearby—a circular indentation about the exact diameter of the stone coin.
+They noticed the wall-door again. Up close, it had more honesty: a narrow seam, and a slender slot—deeper than the seams—hidden in shadow between two wall panels.
 
-Bar’cal studied the seams and nodded. “Panels,” he murmured. “A door that comes apart.”
+Bar’cal studied the stone and nodded. “Panels,” he murmured. “A door that comes apart.”
 
-Zeki, jaw clenched, pushed the coin into the indentation. The wall responded: panels slid forward, then aside, as if a section of the chamber had been waiting patiently to remember it could open. Beyond lay a second room.
+He slid the rune-etched dagger into the slot.
+
+This time the chamber answered fully. The wall sections pulled straight back a handspan, then slid apart with a low grinding sound, revealing the tomb-chamber beyond.
 
 ## The Prince in the Center
 
@@ -147,15 +151,15 @@ Nalini’s men began picking through the remains with the casual greed of people
 
 There was no time for an argument.
 
-They took what they could from the first room—crystals, the coin, anything that felt like it belonged to the same system—and moved.
+They took what they could from the first room—crystals, the stone gryphon amulet, the dagger, anything that felt like it belonged to the same system—and moved.
 
-Bar’cal pocketed the purple-glowing crystal. Others gathered the clear and red crystals. Zeki kept the coin close.
+Bar’cal pocketed the purple-glowing crystal. Others gathered the clear and red crystals. Zeki kept the stone gryphon amulet close.
 
 ## The Green Room and the Betrayal
 
-A second door opened with the same circular coin indentation. It led to a small rectangular chamber, roughly eight feet by six by eight, carved from seamless green stone; the floor was a metal grate, and on the far side stood another green stone door.
+A second door opened with the same circular indentation for the stone gryphon amulet. It led to a small rectangular chamber, roughly eight feet by six by eight, carved from seamless green stone; the floor was a metal grate, and on the far side stood another green stone door.
 
-Zeki stepped inside. The coin indentation was present again—this time on the inside of the door. He placed the coin, and the door slid shut behind him.
+Zeki stepped inside. The indentation was present again—this time on the inside of the door. He placed the stone gryphon amulet, and the door slid shut behind him.
 
 Outside, a different door opened—not back into the dome chamber, but into a tunnel.
 
@@ -219,7 +223,7 @@ Blades passed through cold like striking fog. The resistance was wrong—too lig
 
 Against *it,* normal weapons were not weapons at all.
 
-The party fell back into the small green chamber, slamming the coin-door shut between them and the terrible patience of the dead.
+The party fell back into the small green chamber, slamming the stone door shut between them and the terrible patience of the dead.
 
 For a moment, it seemed the door would not hold. Something cold and furious tested the seam; the grate beneath their feet thrummed like a plucked wire.
 
@@ -236,3 +240,4 @@ Behind them, the clatter of bone echoed—distant, then nearer, then swallowed b
 They fled into the tunnel’s promise, carrying a handful of salvaged wonders and a growing certainty that the Bridge of Vows was less a crossing than a machine—one that answered to bargains, to keys, and to whoever had the will to feed it.
 
 Behind them, the domed ceiling’s painted stars watched without blinking.
+
